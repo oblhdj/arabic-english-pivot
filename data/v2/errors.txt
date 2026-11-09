@@ -1,0 +1,222 @@
+=== MT 3b
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/1793382093.py", line 57, in job
+    timing[tag] = build(both, tag, repo, 48 if tag == "600m" else 16)
+                  ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_24/1793382093.py", line 35, in build
+    T, dt, lens = translate(repo, seg_units + blocks + list(df.p_ar), bs)
+                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_24/1793382093.py", line 25, in translate
+    g = m.generate(**enc, forced_bos_token_id=eng, num_beams=2, max_new_tokens=int(enc.input_ids.shape[1]*1.6)+16)
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/generation/utils.py", line 3000, in generate
+    result = decoding_method(
+        self,
+    ...<5 lines>...
+        **model_kwargs,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/generation/utils.py", line 3722, in _beam_search
+    model_outputs = self(**model_inputs, return_dict=True)
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 1081, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/output_capturing.py", line 287, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 887, in forward
+    outputs = self.model(
+        input_ids,
+    ...<8 lines>...
+        **kwargs,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 1081, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/output_capturing.py", line 287, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 792, in forward
+    decoder_outputs = self.decoder(
+        input_ids=decoder_input_ids,
+    ...<6 lines>...
+        **kwargs,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 1081, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/output_capturing.py", line 287, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 699, in forward
+    hidden_states = decoder_layer(
+        hidden_states,
+    ...<5 lines>...
+        **kwargs,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/modeling_layers.py", line 111, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 447, in forward
+    hidden_states, _ = self.self_attn(
+                       ~~~~~~~~~~~~~~^
+        hidden_states=hidden_states,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 306, in forward
+    key_states, value_states = curr_past_key_values.update(key_states, value_states, self.layer_idx)
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/transformers/cache_utils.py", line 1535, in update
+    keys, values = self.layers[layer_idx].update(key_states, value_states, *args, **kwargs)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/transformers/cache_utils.py", line 135, in update
+    self.keys = torch.cat([self.keys, key_states], dim=-2)
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 92.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 92.81 MiB is free. Including non-PyTorch memory, this process has 14.47 GiB memory in use. Of the allocated memory 13.41 GiB is allocated by PyTorch, and 957.07 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+
+=== Qwen2.5-7B belebele pivot_3b_seg
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_seg'
+
+=== Qwen2.5-7B belebele pivot_3b_ctx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_ctx'
+
+=== Qwen2.5-7B ammlu pivot_3b_seg
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_seg'
+
+=== Qwen2.5-7B ammlu pivot_3b_ctx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_ctx'
+
+=== Llama-3.1-8B belebele pivot_3b_seg
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_seg'
+
+=== Llama-3.1-8B belebele pivot_3b_ctx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_ctx'
+
+=== Llama-3.1-8B ammlu pivot_3b_seg
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_seg'
+
+=== Llama-3.1-8B ammlu pivot_3b_ctx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_ctx'
+
+=== Qwen2.5-14B belebele pivot_3b_ctx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_ctx'
+
+=== Qwen2.5-14B ammlu pivot_3b_ctx
+Traceback (most recent call last):
+  File "/tmp/ipykernel_24/2281504762.py", line 22, in safe
+    try: fn(); return True
+         ~~^^
+  File "/tmp/ipykernel_24/2453314246.py", line 11, in job
+    pr = prompts_for(df, strat); res = run(tok, m, pr)
+  File "/tmp/ipykernel_24/3586572928.py", line 16, in prompts_for
+    return [p_en(getattr(r, f"p_{s}"), getattr(r, f"q_{s}"), getattr(r, f"o_{s}")) for r in df.itertuples()]
+                 ~~~~~~~^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'p_3b_ctx'
+

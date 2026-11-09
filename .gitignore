@@ -1,0 +1,9 @@
+azure_key.txt
+gemini_key.txt
+*.key
+.env
+__pycache__/
+.ipynb_checkpoints/
+*.aux
+*.log
+*.out

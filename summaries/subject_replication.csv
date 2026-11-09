@@ -1,0 +1,18 @@
+subject,Qwen2.5-7B,Llama-3.1-8B,Qwen2.5-14B,n
+Arabic Language (Grammar),-47.0,-27.3,-53.0,66
+Arabic Language (General),-25.2,-20.6,-33.6,107
+Biology,-17.9,-8.9,-27.6,123
+General Knowledge,-13.8,-11.6,-25.4,138
+Arabic Language,-16.5,-3.9,-23.6,127
+Economics,-20.0,-10.0,-22.0,50
+Driving Test,-14.1,-7.4,-20.1,149
+Law,-12.0,-4.0,-20.0,25
+History,-7.4,-17.3,-18.5,81
+Civics,-8.8,8.8,-17.6,34
+Natural Science,-28.6,-22.4,-16.3,49
+Math,-9.8,-2.4,-14.6,41
+Social Science,-20.0,-14.4,-14.4,90
+Geography,-10.8,3.9,-13.7,102
+Islamic Studies,-11.3,-4.1,-10.8,194
+Physics,-3.0,9.1,3.0,33
+Computer Science,-7.4,-3.7,3.7,54

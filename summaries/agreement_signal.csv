@@ -1,0 +1,7 @@
+model,dataset,n,agree_pct,acc_when_agree,acc_disagree_arabic,acc_disagree_pivot,acc_arabic_overall
+Qwen2.5-7B,belebele,900,77.0,92.2,58.5,26.1,84.4
+Llama-3.1-8B,belebele,900,66.9,85.9,35.9,46.3,69.3
+Qwen2.5-7B,ammlu,1464,52.0,72.6,53.3,21.7,63.3
+Llama-3.1-8B,ammlu,1487,52.3,65.3,43.0,25.6,54.6
+Qwen2.5-14B,belebele,896,81.9,93.6,74.7,11.7,90.2
+Qwen2.5-14B,ammlu,1384,55.9,74.7,58.0,17.9,67.3

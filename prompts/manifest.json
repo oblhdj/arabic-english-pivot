@@ -1,0 +1,81 @@
+{
+  "source": "v1 Kaggle run (results (1).zip + rerun_results.zip)",
+  "note": "Prompts carry no chat template; apply the API client's own. Prompts are identical across the two v1 models, verified byte-for-byte. ammlu/ar_direct comes from rerun_results.zip, which supersedes the OOM-truncated run in results (1).zip.",
+  "answer_parsing": "v1 parsed with regex; unparsable counts as wrong.",
+  "files": {
+    "prompts_direct.jsonl": {
+      "total": 5700,
+      "conditions": [
+        {
+          "dataset": "belebele",
+          "strategy": "ar_direct",
+          "mode": "direct",
+          "n": 900,
+          "sha256": "b1eb0536833ef7a07307c82ba32a9637f72280c6a298032b3b6a007cc68a63c2",
+          "mean_prompt_chars": 672.2
+        },
+        {
+          "dataset": "belebele",
+          "strategy": "ar_mt_pivot",
+          "mode": "direct",
+          "n": 900,
+          "sha256": "fe93e6b85315875fdeff77149ca7fc9759d954f12d47f93dd21f7f64c5211ed8",
+          "mean_prompt_chars": 825.4
+        },
+        {
+          "dataset": "belebele",
+          "strategy": "en_human",
+          "mode": "direct",
+          "n": 900,
+          "sha256": "39ff9043e5b5be416efaa78ff0b54e9549c987addde3cca343cc905247b00bf8",
+          "mean_prompt_chars": 812.6
+        },
+        {
+          "dataset": "ammlu",
+          "strategy": "ar_direct",
+          "mode": "direct",
+          "n": 1500,
+          "sha256": "8d248d97a79e5714944ec87dda856f27db5e9556fe4af34cd97e90aa5cd8e4a5",
+          "mean_prompt_chars": 316.5
+        },
+        {
+          "dataset": "ammlu",
+          "strategy": "ar_mt_pivot",
+          "mode": "direct",
+          "n": 1500,
+          "sha256": "be6d29fd39e0363137e97dfdf195d9cc9b25633939b58ff60db7248f0bd0b54b",
+          "mean_prompt_chars": 425.1
+        }
+      ]
+    },
+    "prompts_cot.jsonl": {
+      "total": 900,
+      "conditions": [
+        {
+          "dataset": "belebele",
+          "strategy": "ar_direct",
+          "mode": "cot",
+          "n": 300,
+          "sha256": "72898973aa34f5c33b78c7f718884815ea934bf2ad52ed61936c9522b4166dca",
+          "mean_prompt_chars": 721.2
+        },
+        {
+          "dataset": "belebele",
+          "strategy": "ar_mt_pivot",
+          "mode": "cot",
+          "n": 300,
+          "sha256": "37d563cadfb333126cd857ce161688eac0c92c72dbfe7104bdf981b7db25d9aa",
+          "mean_prompt_chars": 857.6
+        },
+        {
+          "dataset": "belebele",
+          "strategy": "en_human",
+          "mode": "cot",
+          "n": 300,
+          "sha256": "8a312b8c4b897f3fa777869da8c3b98e28f7cd617e0eb1152175c93193f487b2",
+          "mean_prompt_chars": 847.4
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+model,dataset,strategy,n,arabic,alt,delta,lost,gained,p,tok_change_pct
+Phi-4,ammlu,ar_mt_pivot,1499,62.07,49.7,-12.37,363,178,1.4e-15,-57.5
+Phi-4,belebele,ar_mt_pivot,890,90.4,80.9,-9.5,117,32,1.4e-12,-62.6
+Phi-4,belebele,en_human,895,90.4,94.41,4.01,18,54,2.6e-05,-62.7
+gpt-4.1,ammlu,ar_mt_pivot,1492,80.6,55.83,-24.77,439,71,8.7e-66,-27.7
+gpt-4.1,belebele,ar_mt_pivot,891,93.53,84.96,-8.57,94,16,1.3e-14,-19.7
+gpt-4.1,belebele,en_human,895,93.53,95.87,2.34,8,29,0.00075,-19.9
