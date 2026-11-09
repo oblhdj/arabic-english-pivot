@@ -37,10 +37,14 @@ number in the paper against the data behind it.
 
 ## Reproducing the runs
 
-The three Kaggle notebooks are in `notebooks/`. Each needs a GPU T4 x2 session
-with internet on. The first produces `results.zip` and `rerun_results.zip`, the
-second `results_v2.zip` and the third `results_v3.zip`. Unzip each into the
-matching directory under `data/`.
+The two Kaggle notebooks are in `notebooks/`. Each needs a GPU T4 x2 session
+with internet on. `arabic_pivot_experiments.ipynb` produces `results.zip` and
+`rerun_results.zip`, which are the v1 data. `arabic_pivot_v3_3b.ipynb` produced
+`results_v2.zip` with the 600M translator, and the copy here is that same
+notebook switched to NLLB-200 3.3B, which produces `results_v3.zip`. The
+translator and the strategies it runs are set in the third cell, in
+`MT_MODELS` and the per-model strategy lists in `LLMS`. Unzip each archive into
+the matching directory under `data/`.
 
 The API runs need an Azure AI Foundry key with Phi-4 and GPT-4.1 deployed. Put
 the key in the `AZURE_OPENAI_KEY` environment variable, then:

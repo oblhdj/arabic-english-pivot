@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[conference,a4paper]{IEEEtran}
 \IEEEoverridecommandlockouts
 \usepackage{cite}
 \usepackage{amsmath,amssymb}
@@ -21,28 +21,25 @@ oussema.benelhadj@enis.tn}}
 \begin{abstract}
 Large language models are billed and scheduled per token, and the same Arabic
 text needs more tokens than its English translation. We measure this token tax
-on 12 tokenizers and find that it has fallen from 3.0--3.4$\times$ on older
-vocabularies to 1.2--1.7$\times$ on current ones, while an Arabic-centric
-vocabulary reaches parity (0.97$\times$). We then test an English pivot on five
-models, three open and two served through an API: Qwen2.5-7B, Llama-3.1-8B,
-Qwen2.5-14B, Phi-4 and GPT-4.1. The saving a pivot delivers tracks the
-tokenizer closely. Phi-4, whose vocabulary charges Arabic
-3.04$\times$, saves 57--63\% of prompt tokens, close to the 67\% its tokenizer
-allows; GPT-4.1 saves 20--28\% against a ceiling of 27.5\%. The accuracy cost
-behaves differently. On 1,500 native Arabic exam questions the pivot loses
-8.6 points for Llama-3.1, 12.4 for Phi-4, 16.1 for Qwen2.5-7B, 20.3 for
+on 12 tokenizers: it has fallen from 3.0--3.4$\times$ on older vocabularies to
+1.2--1.7$\times$ on current ones, while an Arabic-centric vocabulary reaches
+parity (0.97$\times$). We then test an English pivot on five models, three open
+and two served through an API. The saving tracks the tokenizer closely: Phi-4,
+charged 3.04$\times$ for Arabic, saves 57--63\% of prompt tokens against a
+ceiling of 67\%, and GPT-4.1 saves 20--28\% against 27.5\%. The accuracy cost
+behaves differently. On 1,500 native Arabic exam questions the pivot loses 8.6
+points for Llama-3.1-8B, 12.4 for Phi-4, 16.1 for Qwen2.5-7B, 20.3 for
 Qwen2.5-14B and 24.8 for GPT-4.1: the stronger a model's Arabic, the more
-pivoting costs it, without exception across the five. Replacing the 600M
-translator with NLLB-200 3.3B, 5.5 times larger, recovers a median of 16\% of
-the distance to a human English reference, so the loss is not mainly a matter
-of translator capacity. Per subject the damage is predictable and replicates
-across models (Spearman 0.58--0.76): Arabic grammar questions fall to 24\%,
-near the 25\% chance level, because translation destroys what they test, while
-computer science improves. In step-by-step mode GPT-4.1 saves 0.2\% of weighted
-tokens and loses 13.2 points, since its English reasoning runs longer than its
-Arabic. Pivoting is a model- and content-dependent choice, benchmarks
-translated from English overstate its benefit, and a better translator is not
-the fix it appears to be.
+pivoting costs it, without exception. Replacing the 600M translator with
+NLLB-200 3.3B, 5.5 times larger, recovers a median 16\% of the distance to a
+human English reference, so the loss is not mainly one of translator capacity.
+Per subject the damage replicates across models (Spearman 0.58--0.76): Arabic
+grammar falls to 24\%, the chance level, because translation destroys what the
+questions test, while computer science improves. In step-by-step mode GPT-4.1
+saves 0.2\% of weighted tokens and loses 13.2 points, its English reasoning
+running longer than its Arabic. Pivoting is a model- and content-dependent
+choice, benchmarks translated from English overstate its benefit, and a better
+translator is not the fix it appears to be.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -53,8 +50,8 @@ models, inference cost
 \section{Introduction}
 
 Commercial LLM services charge per input and output token, and self-hosted
-models spend compute and memory in proportion to sequence length \cite{pope,
-kwon}. Because subword vocabularies \cite{sennrich} are learned mostly from
+models spend compute and memory in proportion to sequence length \cite{pope}.
+Because subword vocabularies \cite{sennrich} are learned mostly from
 English text, other languages are split into more tokens for the same content.
 Users of those languages pay more for the same service and fit less text into
 the same context window \cite{petrov, ahia, solatorio, lundin}.
@@ -68,28 +65,21 @@ for Arabic. How large is the tax on current tokenizers? Does a pivot that costs
 no paid tokens keep accuracy on content that was not originally written in
 English? And if it does not, would a better translator fix it?
 
-This paper makes five contributions:
-
-\begin{itemize}
-\item A measurement of the Arabic token tax on 12 tokenizers, from Llama-2 to
-GPT-4o, on 488 parallel passages (Section~\ref{sec:tax}).
-\item A controlled comparison of four strategies (asking in Arabic, local
+This paper makes five contributions. We measure the Arabic token tax on 12
+tokenizers, from Llama-2 to GPT-4o, on 488 parallel passages
+(Section~\ref{sec:tax}). We compare four strategies (asking in Arabic, a local
 machine-translation pivot, LLM self-translation, and a human-English upper
-bound) on five models spanning 7B to a frontier API model, in two answer
-modes, measuring tokens, accuracy and GPU time
-(Sections~\ref{sec:belebele} and \ref{sec:native}).
-\item Evidence that the accuracy cost of pivoting rises with the model's
-Arabic ability, and that the token saving rises with the tokenizer's Arabic
-tax. The two move in opposite directions across our five models.
-\item A test of the obvious remedy. NLLB-200 3.3B in place of the 600M
-distilled model recovers a median 16\% of the gap to human English
-(Section~\ref{sec:bigger}), which contradicts what the upper bound alone
-suggests.
-\item An evaluation of AI-free routing, in which ordinary code decides whether
-to pivot. Surface checks fail, a per-model calibration succeeds, and two
-answer-level methods work but cost more than they save
+bound) on five models spanning 7B to a frontier API model, in two answer modes,
+measuring tokens, accuracy and GPU time (Sections~\ref{sec:belebele} and
+\ref{sec:native}). We show that the accuracy cost of pivoting rises with the
+model's Arabic ability while the token saving rises with the tokenizer's Arabic
+tax, so the two move in opposite directions. We test the obvious remedy: NLLB-200
+3.3B in place of the 600M distilled model recovers a median 16\% of the gap to
+human English (Section~\ref{sec:bigger}), contradicting what the upper bound
+alone suggests. Finally we evaluate AI-free routing, in which ordinary code
+decides whether to pivot; surface checks fail, a per-model calibration
+succeeds, and two answer-level methods work but cost more than they save
 (Section~\ref{sec:routing}).
-\end{itemize}
 
 \section{Related Work}
 
@@ -117,10 +107,8 @@ constraint.
 
 \textbf{Token minimization.} Other approaches compress prompts \cite{lingua},
 budget reasoning tokens \cite{tokenbudget}, or route queries to cheaper models
-\cite{frugal, routellm}. Work on tool-making and self-debugging \cite{toolmaker,
-selfdebug} replaces repeated LLM calls with reusable code and tests. Our
-routing experiment asks whether such AI-free code can decide when a pivot is
-safe.
+\cite{frugal, routellm}. Our routing experiment asks whether ordinary code,
+with no LLM call at inference time, can decide when a pivot is safe.
 
 \section{Method}
 
@@ -158,15 +146,12 @@ back into the right number of options.
 
 \subsection{Strategies}
 
-\begin{itemize}
-\item \texttt{ar\_direct}: Arabic content with Arabic instructions, which is
-what users do now.
-\item \texttt{ar\_mt\_pivot}: NLLB translation, English instructions.
-\item \texttt{ar\_self\_translate}: the LLM first translates the Arabic block,
-then answers the translation; tokens of both calls are counted.
-\item \texttt{en\_human}: the benchmark's human English version, an upper bound
-representing perfect translation.
-\end{itemize}
+We compare four. \texttt{ar\_direct} sends Arabic content with Arabic
+instructions, which is what users do now. \texttt{ar\_mt\_pivot} sends the NLLB
+translation with English instructions. In \texttt{ar\_self\_translate} the LLM
+first translates the Arabic block and then answers the translation, with the
+tokens of both calls counted. \texttt{en\_human} is the benchmark's human
+English version, an upper bound representing perfect translation.
 
 Each strategy is run in two modes: \emph{number only}, where the model replies
 with the option number in at most 16 new tokens, and \emph{step by step}, with
@@ -210,7 +195,7 @@ much that choice matters.
 \subsection{The Arabic token tax}
 \label{sec:tax}
 
-Fig.~1 shows the ratio of Arabic to English tokens on the 488 parallel
+We measured the ratio of Arabic to English tokens on the 488 parallel
 passages. Older English-centric vocabularies need 3.0--3.4$\times$ as many
 tokens (GPT-4 cl100k 3.04, Llama-2 and Phi-3.5 3.42). Current general-purpose
 vocabularies need 1.2--1.7$\times$: GPT-4o 1.38, Gemma-3 1.47, Qwen2.5 and
@@ -229,7 +214,8 @@ factor of 2.17 on the same Arabic text.
 
 Table~\ref{tab:belebele} summarizes the number-only results. The
 local-translation pivot cuts prompt tokens by 20--63\% depending on the
-tokenizer, and the size of that cut follows the tax in Fig.~1 closely. Phi-4,
+tokenizer, and the size of that cut follows the tax of
+Section~\ref{sec:tax} closely. Phi-4,
 at 3.04$\times$, saves 62.6\%, against a theoretical ceiling of 67\%. GPT-4.1,
 at 1.38$\times$, saves 19.7\% against a ceiling of 27.5\%. Equation (2)
 therefore predicts behaviour on two models it was not fitted to.
@@ -293,7 +279,8 @@ advantage the pivot removes.
 pivot. $n = 1{,}500$. Models ordered by Arabic accuracy.}
 \label{tab:ammlu}
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrr}
 \toprule
 Model & Arabic & Pivot & $\Delta$ \\
@@ -422,11 +409,10 @@ with the proverb itself dropped, and it renders the answer ``solitude'' as
 ``Unit''. The 3.3B model keeps the proverb but turns ``companion'' into
 ``babysitter''.
 
-Not every loss is a translation problem. A driving-test item asks what a driver
-should do before getting into the vehicle; the 3.3B model translates all three
-options correctly, and all three LLMs still answer wrongly. Items like this one
-set a floor on what any translator can recover, and they are part of why the
-3.3B model closes so little of the gap in Section~\ref{sec:bigger}.
+Not every loss is a translation problem. In a driving-test item the 3.3B model
+translates all three options correctly and all three LLMs still answer wrongly.
+Such items set a floor on what any translator can recover, and they are part of
+why the 3.3B model closes so little of the gap in Section~\ref{sec:bigger}.
 
 \subsection{Reasoning mode}
 \label{sec:reasoning}
@@ -443,7 +429,8 @@ prompt shorter. The two cancel: weighted tokens fall by 0.2\%, and accuracy
 falls by 13.2 points, from 96.0 to 83.1 ($p = 2.2 \times 10^{-10}$). In
 reasoning mode, on this model, the pivot is a loss with no saving attached.
 
-The explanation is in Fig.~1. Qwen and Llama pay 1.63--1.66$\times$ for Arabic,
+The explanation is in the tokenizer ratios of Section~\ref{sec:tax}. Qwen and
+Llama pay 1.63--1.66$\times$ for Arabic,
 so there is inflation to recover; GPT-4o's vocabulary charges 1.38$\times$, and
 below some threshold the model's own verbosity in English outweighs what the
 tokenizer gives back. The argument for reasoning in English holds for
@@ -535,11 +522,11 @@ without the worst of the loss, and it needs no per-question estimator, which is
 the component we could not build cheaply.
 
 \textbf{Where the saving comes from.} With current tokenizers the input saving
-is bounded near 40\% for Qwen and Llama, and we measured 62.6\% for Phi-4,
-whose vocabulary is older and more English-centric. The saving is largest
-exactly where the tokenizer is worst, so the models that punish Arabic most are
-the ones where pivoting pays. Reasoning is a second lever for high-tax
-tokenizers and not a lever at all for GPT-4.1.
+is bounded near 40\% for Qwen and Llama and reaches 62.6\% for Phi-4, whose
+vocabulary is older and more English-centric: the saving is largest exactly
+where the tokenizer is worst, so the models that punish Arabic most are the
+ones where pivoting pays. Reasoning is a second lever for high-tax tokenizers
+and none at all for GPT-4.1.
 
 \textbf{What the real fix is not.} The human-English bound suggests that a
 better translator would recover most of the gap. We tested that and it does
@@ -581,9 +568,7 @@ of GPT-4.1 prompts and 0.25\% of Phi-4 prompts, unevenly across conditions;
 those items are excluded from paired comparisons. Phi-4 ignored the 16-token
 output cap on 29.7\% of calls, so its output token counts are not comparable
 with the other models', and our savings for it are computed on prompt tokens
-only. Dialectal Arabic and open-ended generation, where answers must also be
-translated back, are not covered; back-translation would add local translation
-time but no paid tokens.
+only.
 
 \section{Conclusion}
 
@@ -603,10 +588,10 @@ English.
 \section*{Acknowledgment}
 
 Experiments ran on free Kaggle GPUs and Azure AI Foundry student credit. The
-study idea originated with the author. Experiment code, statistical analysis,
-figures and a first draft of this paper were produced with the assistance of
-the generative AI tool Claude \cite{claude}. The author ran all experiments and
-reviewed the final text.
+study idea originated with the author, who ran all experiments and reviewed the
+final text. Experiment code, statistical analysis and a first draft of this
+paper were produced with the assistance of the generative AI tool Claude
+\cite{claude}.
 
 \section*{Data and Code Availability}
 
@@ -616,7 +601,6 @@ Kaggle notebooks are at
 
 \begin{thebibliography}{00}
 \bibitem{pope} R. Pope et al., ``Efficiently scaling transformer inference,'' arXiv:2211.05102, 2022.
-\bibitem{kwon} W. Kwon et al., ``Efficient memory management for large language model serving with PagedAttention,'' in \emph{Proc. 29th Symp. Operating Syst. Princ. (SOSP)}, 2023, pp. 611--626.
 \bibitem{sennrich} R. Sennrich, B. Haddow, and A. Birch, ``Neural machine translation of rare words with subword units,'' in \emph{Proc. 54th Annu. Meeting ACL}, 2016, pp. 1715--1725.
 \bibitem{petrov} A. Petrov, E. La Malfa, P. Torr, and A. Bibi, ``Language model tokenizers introduce unfairness between languages,'' in \emph{Adv. Neural Inf. Process. Syst. 36 (NeurIPS)}, 2023, pp. 36\,963--36\,990.
 \bibitem{ahia} O. Ahia et al., ``Do all languages cost the same? Tokenization in the era of commercial language models,'' in \emph{Proc. EMNLP}, 2023, pp. 9904--9923.
@@ -630,8 +614,6 @@ Kaggle notebooks are at
 \bibitem{tokenbudget} T. Han, Z. Wang, C. Fang, S. Zhao, S. Ma, and Z. Chen, ``Token-budget-aware LLM reasoning,'' in \emph{Findings of ACL}, 2025, pp. 24\,842--24\,855.
 \bibitem{frugal} L. Chen, M. Zaharia, and J. Zou, ``FrugalGPT: How to use large language models while reducing cost and improving performance,'' arXiv:2305.05176, 2023.
 \bibitem{routellm} I. Ong et al., ``RouteLLM: Learning to route LLMs with preference data,'' arXiv:2406.18665, 2024.
-\bibitem{toolmaker} T. Cai, X. Wang, T. Ma, X. Chen, and D. Zhou, ``Large language models as tool makers,'' arXiv:2305.17126, 2023.
-\bibitem{selfdebug} X. Chen, M. Lin, N. Sch\"arli, and D. Zhou, ``Teaching large language models to self-debug,'' arXiv:2304.05128, 2023.
 \bibitem{nllb} NLLB Team, ``No language left behind: Scaling human-centered machine translation,'' arXiv:2207.04672, 2022.
 \bibitem{wei} J. Wei et al., ``Chain-of-thought prompting elicits reasoning in large language models,'' in \emph{Adv. Neural Inf. Process. Syst. 35 (NeurIPS)}, 2022, pp. 24\,824--24\,837.
 \bibitem{belebele} L. Bandarkar et al., ``The Belebele benchmark: A parallel reading comprehension dataset in 122 language variants,'' in \emph{Proc. 62nd Annu. Meeting ACL}, 2024, pp. 749--775.
@@ -641,7 +623,7 @@ Kaggle notebooks are at
 \bibitem{tiktoken} ``tiktoken (v0.14.0),'' OpenAI, accessed Nov.\ 3, 2026. [Online]. Available: \url{https://github.com/openai/tiktoken}
 \bibitem{chrf} M. Popovi\'c, ``chrF: Character n-gram F-score for automatic MT evaluation,'' in \emph{Proc. 10th Workshop Statistical Mach. Transl. (WMT)}, 2015, pp. 392--395.
 \bibitem{sacrebleu} M. Post, ``A call for clarity in reporting BLEU scores,'' in \emph{Proc. 3rd Conf. Mach. Transl. (WMT)}, 2018, pp. 186--191.
-\bibitem{claude} ``Claude ([model version]), Anthropic,'' accessed Nov.\ 4, 2026. [Online]. Available: \url{https://claude.ai}
+\bibitem{claude} ``Claude (Opus 5), Anthropic,'' accessed Nov.\ 4, 2026. [Online]. Available: \url{https://claude.ai}
 \end{thebibliography}
 
 \end{document}
